@@ -1,0 +1,11 @@
+{:source-paths ["src/"]
+ :dependencies [[cljs-bean "1.8.0"]
+                [funcool/promesa "9.0.462"]]
+
+ :builds {:cljs-utils
+          {:target :npm-module
+           :compiler-options {:optimizations :simple}
+           :entries [viasat.util
+                     viasat.retry
+                     viasat.schema-print]
+           :output-dir "dist"}}}
