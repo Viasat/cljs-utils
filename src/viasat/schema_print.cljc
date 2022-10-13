@@ -107,7 +107,7 @@
             mung #(reduce (fn [m [k path]]
                             (let [fv (format-field schema k (get-in++ % path))]
                               (assoc m k fv)))
-                          {} k-paths)
+                          % k-paths)
             rows (map mung data)
             rows (if-let [s (:sort schema)] (sort-by s rows) rows)
             rows (if-let [s (:rsort schema)] (reverse (sort-by s rows)) rows)
