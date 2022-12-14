@@ -39,7 +39,10 @@
 (defn trim [s] (S/replace s #"\s*$" ""))
 
 (defn right-pad [s pad]
-  (apply str (take pad (concat (seq s) (repeat " ")))))
+  (.padEnd (str s) pad " "))
+
+(defn left-pad [s pad]
+  (.padStart (str s) pad " "))
 
 (def Eprn     #(binding [*print-fn* *print-err-fn*] (apply prn %&)))
 (def Eprintln #(binding [*print-fn* *print-err-fn*] (apply println %&)))
