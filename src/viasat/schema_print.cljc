@@ -31,7 +31,7 @@
 
 (def DEFAULT-TIME-REGEX #"Time$|-time$")
 
-(defn format-field [{:keys [verbose field-max time-regex]
+(defn format-field [{:keys [verbose field-max time-regex hide-null]
                      :or {field-max 40
                           time-regex DEFAULT-TIME-REGEX}} k v]
   (cond
@@ -44,6 +44,9 @@
 
     (and (not verbose) (string? v) (> (count v) field-max))
     (str (.substr v 0 (- field-max 3)) "...") ;; shorten
+
+    (and (nil? v) hide-null)
+    ""
 
     :else
     v))
@@ -72,7 +75,7 @@
          :or {dbg identity}} opts
         ;; Update schema from opts keys if given
         schema (merge schema
-                      (select-keys opts [:verbose :field-max :time-regex]))
+                      (select-keys opts [:verbose :field-max :time-regex :hide-null]))
         schema (cond-> schema
                  fields (assoc :fields (map keyword (S/split fields #"[, ]")))
                  sort   (assoc :sort (keyword sort))
@@ -122,4 +125,3 @@
         (if no-headers
           (println (trim (.print table)))
           (println (trim (.toString table))))))))
-
