@@ -29,7 +29,7 @@
            path)
     obj))
 
-(def DEFAULT-TIME-REGEX #"Time$|-time$")
+(def DEFAULT-TIME-REGEX #"Time$|-time$|^time$")
 
 (defn format-field [{:keys [verbose field-max time-regex hide-null]
                      :or {field-max 40
