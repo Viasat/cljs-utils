@@ -6,7 +6,8 @@
             ["util" :refer [promisify]]
             ["fs" :as fs]
             ["child_process" :as cp]
-            ["neodoc" :as neodoc]))
+            ["neodoc" :as neodoc]
+            ["yaml$default" :as yaml]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Argument processing
@@ -83,3 +84,7 @@
 (def read-file (promisify fs/readFile))
 
 (def write-file (promisify fs/writeFile))
+
+(defn load-yaml [path]
+  (P/-> (read-file path "utf8") yaml/parse ->clj))
+
