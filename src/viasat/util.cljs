@@ -1,6 +1,7 @@
 (ns viasat.util
   (:require [cljs.pprint :refer [pprint]]
             [clojure.string :as S]
+            [clojure.walk :refer [postwalk]]
             [promesa.core :as P]
             [cljs-bean.core :refer [->clj]]
             ["util" :refer [promisify]]
@@ -54,6 +55,30 @@
     (apply Eprintln args))
   (js/process.exit code))
 
+;; From: https://github.com/LonoCloud/conlink/blob/master/src/conlink/util.cljs#L78
+(def INTERPOLATE-RE (js/RegExp. "[$](?:([$])|([_a-z][_a-z0-9]*)|{([_a-z][_a-z0-9]*)(?:(:?[-?])([^}]*))?}|())" "gi"))
+
+(defn interpolate [s env]
+  (.replaceAll
+    s INTERPOLATE-RE
+    (fn [_ escaped named braced sep value invalid offset groups]
+      (cond escaped "$"
+            named   (get env named "")
+            sep     (let [unset? (not (contains? env braced))
+                          unset-or-null? (empty? (get env braced nil))
+                          env-val (get env braced)]
+                      (condp = sep
+                        ":-" (if unset-or-null? value env-val)
+                        "-"  (if unset? value env-val)
+                        ":?" (if unset-or-null? (throw (js/Error. value)) env-val)
+                        "?"  (if unset? (throw (js/Error. value)) env-val)))
+            braced (get env braced "")
+            invalid (str "$" invalid)))))
+
+(defn interpolate-walk [o env]
+    (postwalk #(if (string? %) (interpolate % env) %) o))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (def exec-promise (promisify cp/exec))
 (defn exec [cmd & [opts]]
