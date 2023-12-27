@@ -1,6 +1,8 @@
 (ns viasat.retry
   (:require [promesa.core :as P]))
 
+(def Eprn     #(binding [*print-fn* *print-err-fn*] (apply prn %&)))
+
 ;; Promise/Promesa-based retry
 (defn retry
   "Repeat action-fn (promise or plain function) until it returns truthy.
@@ -16,11 +18,12 @@
     :check-fn    - Check result of action-fn. [default: identity]
   "
   [action-fn & [opts]]
-  (let [opts (merge {:attempt 0 :delay-ms 1000
+  (let [opts (merge {:attempt 0 :delay-ms 1000 :verbose false
                      :delay-fn P/delay :check-fn identity} opts)]
     (P/loop [opts opts]
       (P/let [{:keys [attempt max-retries delay-ms delay-fn check-fn]} opts
               res (action-fn)]
+        (when (:verbose opts) (Eprn :retry  :res res :opts opts))
         (if (or (check-fn res) (and max-retries (>= attempt max-retries)))
           res
           (P/let [new-opts (P/->> opts (delay-fn delay-ms) (merge opts))]
