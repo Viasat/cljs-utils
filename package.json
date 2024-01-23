@@ -1,13 +1,14 @@
 {
   "name": "@viasat/cljs-utils",
-  "version": "0.0.1",
+  "version": "0.1.2",
   "repository": "https://github.com/viasat/cljs-utils",
   "license": "Copyright 2022 Viasat, Inc. All Rights Reserved",
   "description": "ClojureScript utility libraries",
   "dependencies": {
     "easy-table": "1.2.0",
     "nbb": "^0.7.132",
-    "neodoc": "^2.0.2"
+    "neodoc": "^2.0.2",
+    "yaml": "^2.1.3"
   },
   "devDependencies": {
     "shadow-cljs": "2.20.2"
