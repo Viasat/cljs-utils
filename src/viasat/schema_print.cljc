@@ -1,3 +1,6 @@
+;; Copyright (c) 2024, Viasat, Inc
+;; Licensed under EPL 2.0
+
 (ns viasat.schema-print
   (:require [cljs.pprint :refer [pprint]]
             [cljs-bean.core :refer [->clj]]
