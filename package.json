@@ -1,6 +1,6 @@
 {
-  "name": "@viasat/cljs-utils",
-  "version": "0.1.2",
+  "name": "@lonocloud/cljs-utils",
+  "version": "0.1.3",
   "repository": "https://github.com/viasat/cljs-utils",
   "license": "SEE LICENSE IN LICENSE",
   "description": "ClojureScript utility libraries",
